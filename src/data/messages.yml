@@ -1,0 +1,16 @@
+start: Hello, filling for coffins!
+stop: Hasta la vista, meatbag!
+
+translate: I'm waiting... To finish do not put '/break'
+
+commands: |
+  Commands:
+    /start
+    /stop
+    /translate_document
+    /translate
+    /commands
+  Inline messages:
+    What time is it?
+
+no_command: Do you know what cheers me up? Mockery of others' failures.
