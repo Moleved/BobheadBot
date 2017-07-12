@@ -1,4 +1,5 @@
 require 'telegramAPI'
+require 'open-uri'
 
 class DocumentHandler
   attr_reader :document, :api, :url
@@ -12,13 +13,12 @@ class DocumentHandler
   end
 
   def translate_document
-    File.new('translated.txt', 'w').puts translate_content
+    File.open('translated.txt', 'w') { |file| file.write(translate_content) }
   end
 
   private
 
   def get_file_content
-    puts api.getFile(document.file_id).fetch('file_path')
     open(url) do |f|
       @text = f.readlines
     end
