@@ -1,0 +1,4 @@
+.idea/
+.env
+Gemfile.lock
+*.txt
