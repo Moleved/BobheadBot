@@ -9,7 +9,7 @@ class RequestHandler
     @bot = receiver.bot
 
     @answers = YAML.load_file(
-      File.join(File.dirname(__FILE__), 'data', 'messages.yml')
+      File.join('src', 'data', 'messages.yml')
     )
 
     handle_message
@@ -20,12 +20,12 @@ class RequestHandler
     when 'What time is it?'
       send_response Time.now.strftime('%T')
     when '/start'
-      send_response @answers[:start]
-      send_response @answers[:commands]
+      send_response @answers['start']
+      send_response @answers['commands']
     when '/stop'
-      send_response @answers[:stop]
+      send_response @answers['stop']
     when '/translate'
-      send_response @answers[:translate]
+      send_response @answers['translate']
 
       receiver.listen do |message|
         break if message.text == '/break'
@@ -33,7 +33,7 @@ class RequestHandler
         send_response Translator.translate message
       end
     when '/translate_document'
-      send_response @answers[:translate]
+      send_response @answers['translate']
 
       receiver.listen do |message|
         send_response @answers['no_command'] if message.document.nil?
@@ -43,9 +43,9 @@ class RequestHandler
         send_response handle_document, 'document'
       end
     when '/commands'
-      send_response @answers[:commands]
+      send_response @answers['commands']
     else
-      send_response @answers[:no_command]
+      send_response @answers['no_command']
     end
   end
 
