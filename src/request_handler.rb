@@ -9,7 +9,7 @@ class RequestHandler
     @bot = receiver.bot
 
     @answers = YAML.load_file(
-      File.join(File.dirname(__FILE__), 'data', 'message.yml')
+      File.join(File.dirname(__FILE__), 'data', 'messages.yml')
     )
 
     handle_message
