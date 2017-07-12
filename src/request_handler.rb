@@ -8,41 +8,44 @@ class RequestHandler
     @message = receiver.message
     @bot = receiver.bot
 
-    @answers = YAML.load_file(File.dirname(__FILE__) + '/data/messages.yml')
+    @answers = YAML.load_file(
+      File.join(File.dirname(__FILE__), 'data', 'message.yml')
+    )
 
     handle_message
   end
 
   def handle_message
     case message.text
-      when 'What time is it?'
-        send_response Time.now.strftime("%T")
-      when '/start'
-        send_response @answers.fetch('start')
-        send_response @answers.fetch('commands')
-      when '/stop'
-        send_response @answers.fetch('stop')
-      when '/translate'
-        send_response @answers.fetch('translate')
+    when 'What time is it?'
+      send_response Time.now.strftime('%T')
+    when '/start'
+      send_response @answers[:start]
+      send_response @answers[:commands]
+    when '/stop'
+      send_response @answers[:stop]
+    when '/translate'
+      send_response @answers[:translate]
 
-        receiver.listen do |message|
-          break if message.text.equal? '/break'
+      receiver.listen do |message|
+        break if message.text == '/break'
 
-          Translator.translate message
-        end
-      when '/translate_document'
-        send_response @answers.fetch('translate')
+        send_response Translator.translate message
+      end
+    when '/translate_document'
+      send_response @answers[:translate]
 
-        receiver.listen do |message|
-          send_response @answers['no_command'] if message.document.nil?
-          break if message.text.equal? '/break'
+      receiver.listen do |message|
+        send_response @answers['no_command'] if message.document.nil?
+        break if message.text == '/break'
 
-          send_response handle_document, 'document'
-        end
-      when '/commands'
-        send_response @answers.fetch('commands')
-      else
-        send_response @answers.fetch('no_command')
+        @message = message
+        send_response handle_document, 'document'
+      end
+    when '/commands'
+      send_response @answers[:commands]
+    else
+      send_response @answers[:no_command]
     end
   end
 
@@ -53,7 +56,7 @@ class RequestHandler
   private
 
   def send_response(response, type = 'message')
-     ResponseSender.new(self, { type: type, content: response })
+    ResponseSender.new(self, { type: type, content: response })
   end
 
   def document?

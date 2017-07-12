@@ -17,6 +17,7 @@ class DocumentHandler
   private
 
   def get_file_content
+    puts api.getFile(document.file_id).fetch('file_path')
     open("https://api.telegram.org/file/bot#{@token}/#{api.getFile(document.file_id)['file_path']}") do |f|
       @text = f.readlines
     end

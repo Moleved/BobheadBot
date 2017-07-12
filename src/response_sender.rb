@@ -17,15 +17,15 @@ class ResponseSender
 
   def send_message
     bot.api.send_message(
-        chat_id: self.message.chat.id,
-        text: response.fetch(:content)
+      chat_id: message.chat.id,
+      text: response.fetch(:content)
     )
   end
 
   def send_document
     bot.api.send_document(
-               chat_id: self.message.chat.id,
-               document: Faraday::UploadIO.new(response.fetch(:content), 'text/plain')
+      chat_id: message.chat.id,
+      document: Faraday::UploadIO.new(response.fetch(:content), 'text/plain')
     )
   end
 end
