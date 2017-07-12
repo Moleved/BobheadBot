@@ -1,13 +1,14 @@
 require 'telegramAPI'
 
 class DocumentHandler
-  attr_reader :document, :api
+  attr_reader :document, :api, :url
 
   def initialize(request_handler)
     @token = ENV['TOKEN']
     @document = request_handler.message.document
 
     @api = TelegramAPI.new(@token)
+    @url = "https://api.telegram.org/file/bot#{@token}/#{api.getFile(document.file_id)['file_path']}"
   end
 
   def translate_document
@@ -18,7 +19,7 @@ class DocumentHandler
 
   def get_file_content
     puts api.getFile(document.file_id).fetch('file_path')
-    open("https://api.telegram.org/file/bot#{@token}/#{api.getFile(document.file_id)['file_path']}") do |f|
+    open(url) do |f|
       @text = f.readlines
     end
   end
